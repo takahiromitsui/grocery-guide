@@ -23,9 +23,10 @@ describe('UsersService', () => {
     };
 
     const createdUser = service.create(user);
-
-    expect(createdUser).toHaveProperty('id');
-    expect(createdUser).not.toHaveProperty('password');
-    expect(createdUser).toHaveProperty('email', 'example@mail.com');
+    expect(createdUser).toEqual({
+      id: expect.any(Number),
+      email: 'example@mail.com',
+      username: 'example',
+    });
   });
 });
