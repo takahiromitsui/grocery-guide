@@ -34,9 +34,14 @@ export class UsersService {
   //   return `This action returns all users`;
   // }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} user`;
-  // }
+  async findOne(username: string) {
+    const user = this.users.find((user) => user.username === username);
+
+    if (!user) {
+      return null;
+    }
+    return user;
+  }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;

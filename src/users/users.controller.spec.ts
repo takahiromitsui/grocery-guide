@@ -1,9 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { User } from './entities/user.entity';
 
 describe('UsersController', () => {
   let controller: UsersController;
+  const users: User[] = [
+    {
+      id: 1,
+      email: 'janedoe@mail.com',
+      username: 'janedoe',
+      password: 'password',
+    },
+    {
+      id: 2,
+      email: 'james@mail.com',
+      username: 'jamesdoe',
+      password: 'password',
+    },
+  ];
   const mockUserService = {
     create: jest.fn((dto) => {
       return {
@@ -11,6 +26,13 @@ describe('UsersController', () => {
         username: dto.username,
         email: dto.email,
       };
+    }),
+    findOne: jest.fn(async (username) => {
+      const user = users.find((user) => user.username === username);
+      if (!user) {
+        return null;
+      }
+      return user;
     }),
   };
 
@@ -40,6 +62,14 @@ describe('UsersController', () => {
       id: expect.any(Number),
       email: 'example@mail.com',
       username: 'example',
+    });
+  });
+  it('should return one item', async () => {
+    expect(await controller.findOne('janedoe')).toEqual({
+      id: 1,
+      email: 'janedoe@mail.com',
+      username: 'janedoe',
+      password: 'password',
     });
   });
 });
