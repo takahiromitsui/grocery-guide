@@ -52,7 +52,7 @@ describe('AuthService', () => {
       password: 'password',
     };
 
-    const loginUser = await service.validateUser(user);
+    const loginUser = await service.validateUser(user.username, user.password);
     expect(loginUser).toEqual({
       id: 1,
       email: 'janedoe@mail.com',
@@ -64,7 +64,7 @@ describe('AuthService', () => {
       password: 'password',
     };
 
-    const loginUser = await service.validateUser(user);
+    const loginUser = await service.validateUser(user.username, user.password);
     expect(loginUser).toBeNull();
   });
   it('should fail to login with incorrect username and password', async () => {
@@ -73,7 +73,7 @@ describe('AuthService', () => {
       password: 'random',
     };
 
-    const loginUser = await service.validateUser(user);
+    const loginUser = await service.validateUser(user.username, user.password);
     expect(loginUser).toBeNull();
   });
 });
