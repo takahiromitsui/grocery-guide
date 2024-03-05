@@ -6,6 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "generate": "drizzle-kit generate:pg --config=drizzle.config.ts",
+    "migrate": "tsx db/migrate.ts",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
@@ -26,6 +28,7 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^9.0.0",
+    "dotenv": "^16.4.5",
     "drizzle-orm": "^0.29.4",
     "express-session": "^1.18.0",
     "passport": "^0.7.0",
@@ -33,7 +36,8 @@
     "postgres": "^3.4.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "tsx": "^4.7.1"
+    "tsx": "^4.7.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",
