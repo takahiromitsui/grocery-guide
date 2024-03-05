@@ -1,12 +1,16 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+
 import { db } from 'db/db';
 import { users } from 'db/schema';
 
 @Injectable()
 export class UsersService {
+  private logger = new Logger();
   async create(createUserDto: CreateUserDto) {
     try {
       const data = await db
@@ -23,11 +27,13 @@ export class UsersService {
           updatedAt: users.updatedAt,
         });
       if (!data.length) {
+        this.logger.error('callback is empty array');
         throw new Error('Failed to create user');
       }
+      this.logger.log('User created');
       return data[0];
     } catch (error) {
-      console.log(error);
+      this.logger.error(error);
       throw new InternalServerErrorException('Failed to create user');
     }
   }
