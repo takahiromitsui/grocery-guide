@@ -3,8 +3,8 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 
+import { CreateUserDto } from './dto/create-user.dto';
 import { db } from 'db/db';
 import { users } from 'db/schema';
 

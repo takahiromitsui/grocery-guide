@@ -1,10 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { z } from 'zod';
+import { CreateUserSchema } from '../../contract';
 
-export class CreateUserDto {
-  @ApiProperty()
-  email: string;
-  @ApiProperty()
-  username: string;
-  @ApiProperty()
-  password: string;
-}
+export type CreateUserDto = z.infer<typeof CreateUserSchema>;

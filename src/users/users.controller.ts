@@ -1,34 +1,37 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
+import { contract } from '../contract';
 
-@Controller('users')
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @TsRestHandler(contract)
+  async handler() {
+    return tsRestHandler(contract, {
+      create: async ({ body }) => {
+        const user = await this.usersService.create(body);
+        if (!user) {
+          return { status: 404, body: null };
+        }
+        return { status: 200, body: user };
+      },
+    });
   }
+  // @Post()
+  // async create(@Body() createUserDto: CreateUserDto) {
+  //   return await this.usersService.create(createUserDto);
+  // }
 
   // @Get()
   // findAll() {
   //   return this.usersService.findAll();
   // }
 
-  @Get(':username')
-  async findOne(@Param('username') username: string) {
-    return await this.usersService.findOne(username);
-  }
+  // @Get(':username')
+  // async findOne(@Param('username') username: string) {
+  //   return await this.usersService.findOne(username);
+  // }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
