@@ -1,47 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { db } from 'db/db';
+import { users } from 'db/schema';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: 1,
-      email: 'janedoe@mail.com',
-      username: 'janedoe',
-      password: 'password',
-    },
-    {
-      id: 2,
-      email: 'james@mail.com',
-      username: 'jamesdoe',
-      password: 'password',
-    },
-  ];
-  create(createUserDto: CreateUserDto) {
-    const user = {
-      id: Math.random(),
-      ...createUserDto,
-    };
-    this.users.push(user);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...rest } = user;
-    return rest;
+  async create(createUserDto: CreateUserDto) {
+    try {
+      const data = await db
+        .insert(users)
+        .values({
+          username: createUserDto.username,
+          email: createUserDto.email,
+          password: createUserDto.password,
+        })
+        .returning({
+          id: users.id,
+          username: users.username,
+          createdAt: users.createdAt,
+          updatedAt: users.updatedAt,
+        });
+      if (!data.length) {
+        throw new Error('Failed to create user');
+      }
+      return data[0];
+    } catch (error) {
+      console.log(error);
+      throw new InternalServerErrorException('Failed to create user');
+    }
   }
 
   // findAll() {
   //   return `This action returns all users`;
   // }
 
-  async findOne(username: string) {
-    const user = this.users.find((user) => user.username === username);
+  // async findOne(username: string) {
+  //   const user = this.users.find((user) => user.username === username);
 
-    if (!user) {
-      return null;
-    }
-    return user;
-  }
+  //   if (!user) {
+  //     return null;
+  //   }
+  //   return user;
+  // }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
   //   return `This action updates a #${id} user`;
