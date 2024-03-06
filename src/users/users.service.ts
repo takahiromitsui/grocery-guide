@@ -7,12 +7,20 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { db } from 'db/db';
 import { users } from 'db/schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class UsersService {
   private logger = new Logger();
   async create(createUserDto: CreateUserDto) {
     try {
+      const user = await db.query.users.findFirst({
+        where: eq(users.email, createUserDto.email),
+      });
+      if (user) {
+        this.logger.error('user already exists');
+        throw new Error('Failed to create user');
+      }
       const data = await db
         .insert(users)
         .values({
@@ -37,7 +45,6 @@ export class UsersService {
       throw new InternalServerErrorException('Failed to create user');
     }
   }
-
   // findAll() {
   //   return `This action returns all users`;
   // }
