@@ -8,10 +8,12 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { db } from 'db/db';
 import { users } from 'db/schema';
 import { eq } from 'drizzle-orm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
-  private logger = new Logger();
+  logger = new Logger();
+  saltOrRounds = 10;
   async create(createUserDto: CreateUserDto) {
     try {
       const user = await db.query.users.findFirst({
@@ -21,12 +23,13 @@ export class UsersService {
         this.logger.error('user already exists');
         throw new Error('Failed to create user');
       }
+      const hash = await bcrypt.hash(createUserDto.password, this.saltOrRounds);
       const data = await db
         .insert(users)
         .values({
           username: createUserDto.username,
           email: createUserDto.email,
-          password: createUserDto.password,
+          password: hash,
         })
         .returning({
           id: users.id,
