@@ -9,6 +9,7 @@ import { db } from 'db/db';
 import { users } from 'db/schema';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
+import { LoginDto } from './dto/login-dto';
 
 @Injectable()
 export class UsersService {
@@ -46,6 +47,28 @@ export class UsersService {
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException('Failed to create user');
+    }
+  }
+  async login(loginDto: LoginDto) {
+    try {
+      const user = await db.query.users.findFirst({
+        where: eq(users.email, loginDto.email),
+      });
+      if (!user) {
+        this.logger.error('user not found');
+        throw new Error('Failed to login');
+      }
+      const match = await bcrypt.compare(loginDto.password, user.password);
+      if (!match) {
+        this.logger.error('wrong password');
+        return null;
+      }
+      const { password, email, ...rest } = user;
+      this.logger.log('user successfully login');
+      return rest;
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException('Failed to login user');
     }
   }
   // findAll() {

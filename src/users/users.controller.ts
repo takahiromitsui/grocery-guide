@@ -1,14 +1,14 @@
 import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { TsRestHandler, tsRestHandler } from '@ts-rest/nest';
-import { contract } from '../contract';
+import { usersContract } from './users.contract';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  @TsRestHandler(contract)
+  @TsRestHandler(usersContract)
   async handler() {
-    return tsRestHandler(contract, {
+    return tsRestHandler(usersContract, {
       create: async ({ body }) => {
         const user = await this.usersService.create(body);
         if (!user) {
