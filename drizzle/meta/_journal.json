@@ -8,6 +8,13 @@
       "when": 1709634505815,
       "tag": "0000_special_natasha_romanoff",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710238241658,
+      "tag": "0001_cold_pride",
+      "breakpoints": true
     }
   ]
 }
