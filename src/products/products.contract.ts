@@ -32,4 +32,16 @@ export const productsContract = c.router({
     summary: 'Create a product',
     description: 'Create a product',
   },
+  findOne: {
+    method: 'GET',
+    path: '/products',
+    responses: {
+      201: ProductSchema,
+    },
+    query: z.object({
+      name: z.string(),
+    }),
+    summary: 'Get a product',
+    description: 'Get a product by name and user_id on session',
+  },
 });
