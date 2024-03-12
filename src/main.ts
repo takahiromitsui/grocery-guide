@@ -21,7 +21,7 @@ async function bootstrap() {
   app.use(
     //save the session on the database
     session({
-      secret: 'keyboard cat', // use env for production
+      secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
       cookie: { maxAge: maxAge },
