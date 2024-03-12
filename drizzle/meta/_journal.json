@@ -15,6 +15,13 @@
       "when": 1710238241658,
       "tag": "0001_cold_pride",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710250209870,
+      "tag": "0002_parched_angel",
+      "breakpoints": true
     }
   ]
 }
