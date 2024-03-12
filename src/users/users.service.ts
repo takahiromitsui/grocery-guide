@@ -9,7 +9,6 @@ import { db } from 'db/db';
 import { users } from 'db/schema';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/login-dto';
 
 @Injectable()
 export class UsersService {

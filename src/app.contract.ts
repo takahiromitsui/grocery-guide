@@ -1,5 +1,5 @@
 import { initContract } from '@ts-rest/core';
-import { LoginSchema } from './users/dto/login-dto';
+import { LoginSchema } from './users/dto/login.dto';
 import { UserResponseSchema } from './users/users.contract';
 import { z } from 'zod';
 

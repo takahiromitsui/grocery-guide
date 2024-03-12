@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { LoginDto } from '../users/dto/login-dto';
+import { LoginDto } from '../users/dto/login.dto';
 import { db } from 'db/db';
 import { eq } from 'drizzle-orm';
 import * as bcrypt from 'bcrypt';
