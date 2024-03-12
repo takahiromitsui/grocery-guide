@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { db } from 'db/db';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { products, users } from 'db/schema';
 
 @Injectable()
@@ -20,6 +20,14 @@ export class ProductsService {
       if (!user) {
         this.logger.error('user not exists');
         throw new Error('Failed to create product');
+      }
+      const product = await this.findProductByName(
+        userId,
+        createProductDto.name,
+      );
+      if (product) {
+        this.logger.error('user already has the product');
+        throw new Error('Product must have an unique name');
       }
       const data = await db
         .insert(products)
@@ -45,5 +53,11 @@ export class ProductsService {
       this.logger.error(error);
       throw new InternalServerErrorException('Failed to create product');
     }
+  }
+  async findProductByName(userId: number, name: string) {
+    const product = await db.query.products.findFirst({
+      where: and(eq(products.userId, userId), eq(products.name, name)),
+    });
+    return product;
   }
 }
